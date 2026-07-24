@@ -1,0 +1,16 @@
+cff-version: 1.2.0
+message: "If you use this software or the benchmark dataset, please cite it as below."
+title: "FabGAN-ID: Learned Generative Process Twins in a Fully Differentiable Fabrication Loop for Yield-Aware Inverse Design of Multilayer Photonic Sensor Front-Ends"
+authors:
+  - family-names: "Mahim"
+    given-names: "Tanvir M."
+    affiliation: "BRAC University"
+  - family-names: "Rahman"
+    given-names: "M. Mosaddequr"
+    affiliation: "BRAC University"
+  - family-names: "Mohsin"
+    given-names: "Abu S. M."
+    affiliation: "BRAC University"
+year: 2026
+license: Apache-2.0
+repository-code: "https://github.com/Tanvir-Mahmud-Mahim/Learned-generative-process-twins-for-yield-aware-inverse-design-of-multilayer-photonic-sensor"

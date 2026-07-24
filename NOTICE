@@ -1,0 +1,8 @@
+FabGAN-ID: Learned Generative Process Twins for Yield-Aware Inverse Design
+of Multilayer Photonic Sensor Front-Ends
+
+Copyright 2026 Tanvir M. Mahim
+
+This product includes material dispersion data derived from the
+refractiveindex.info database (public domain, CC0), and validates its solver
+against the open-source `tmm` package by Steven J. Byrnes.

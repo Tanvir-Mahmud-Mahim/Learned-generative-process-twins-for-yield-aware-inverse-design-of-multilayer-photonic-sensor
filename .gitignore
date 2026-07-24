@@ -1,0 +1,10 @@
+__pycache__/
+*.pyc
+*.pkl
+*.npy
+results/
+*.aux
+*.log
+*.out
+.DS_Store
+.jaxcache/

@@ -72,35 +72,39 @@ def fig_inverse():
 
 # ---------------------------------------------------------------- twin ----
 def fig_twin():
-    r = load("exp3_fabgan.json")
-    names = ["gauss_diag", "gauss_full", "gan_vanilla", "fabgan_tail"]
-    labels = ["Gauss.\ndiag.", "Gauss.\nfull", "FabGAN\n(ours)", "TC\nvariant"]
+    r = load("rev_baselines.json")
+    names = ["gauss_diag", "gauss_full", "gmm", "boot", "fabgan"]
+    colors = {"gauss_diag": GRAY, "gauss_full": ORANGE, "gmm": GREEN,
+              "boot": RED, "fabgan": BLUE}
+    labels = ["Gauss.\ndiag.", "Gauss.\nfull", "GMM\n(5c)", "Boot-\nstrap",
+              "FabGAN\n(ours)"]
+    nb = len(names); fabi = nb - 1
     metrics = [("P5_abs_err_mean", r"$P_5$ estimation error"),
                ("CVaR5_abs_err_mean", r"$\mathrm{CVaR}_{5\%}$ estim. error")]
     fig, ax = plt.subplots(1, 2, figsize=(W1, 1.92))
     fig.subplots_adjust(wspace=0.30)
     for a, (m, t), pl in zip(ax, metrics, ["(a)", "(b)"]):
         vals = [r[n][m] for n in names]
-        bars = a.bar(range(4), vals,
-                     color=[TWIN_COLORS[n] for n in names], width=0.66,
+        bars = a.bar(range(nb), vals,
+                     color=[colors[n] for n in names], width=0.66,
                      edgecolor="white", lw=0.5)
-        bars[2].set_hatch("//")
-        bars[2].set_edgecolor("white")
+        bars[fabi].set_hatch("//")
+        bars[fabi].set_edgecolor("white")
         # value labels above every bar
         for b, v in zip(bars, vals):
             a.text(b.get_x() + b.get_width() / 2, v + 0.0004, "%.4f" % v,
-                   ha="center", va="bottom", fontsize=5.6)
-        # improvement callout above the FabGAN bar
-        best_base = min(vals[0], vals[1])
-        red = 100 * (1 - vals[2] / best_base)
-        a.plot([1.45, 2.55], [best_base, best_base], color="#555555",
-               lw=0.7, ls=(0, (3, 2)))
-        a.annotate("$-%d\\%%$" % round(red), xy=(2, vals[2] + 0.0016),
-                   xytext=(2, best_base + 0.0028), ha="center", fontsize=7.5,
-                   color=BLUE, fontweight="bold",
+                   ha="center", va="bottom", fontsize=5.2)
+        # improvement callout above the FabGAN bar (vs best non-FabGAN baseline)
+        best_base = min(vals[:fabi])
+        red = 100 * (1 - vals[fabi] / best_base)
+        a.plot([fabi - 1.05, fabi + 0.45], [best_base, best_base],
+               color="#555555", lw=0.7, ls=(0, (3, 2)))
+        a.annotate("$-%d\\%%$" % round(red), xy=(fabi, vals[fabi] + 0.0016),
+                   xytext=(fabi - 0.5, best_base + 0.0028), ha="center",
+                   fontsize=7.5, color=BLUE, fontweight="bold",
                    arrowprops=dict(arrowstyle="->", color=BLUE, lw=0.9))
-        a.set_xticks(range(4))
-        a.set_xticklabels(labels, fontsize=5.9)
+        a.set_xticks(range(nb))
+        a.set_xticklabels(labels, fontsize=5.5)
         a.set_title(t, fontsize=6.9, pad=3)
         a.set_ylim(0, max(vals) * 1.38)
         a.tick_params(labelsize=5.8)
@@ -167,8 +171,10 @@ def fig_yield():
         xs = np.sort(J)
         axi.plot(xs, np.linspace(0, 1, len(xs)), color=c, lw=1.2)
     axi.set_xlim(0.84, 0.95); axi.set_ylim(0, 0.08)
-    axi.tick_params(labelsize=5)
-    axi.set_title("lower tail", fontsize=5.5, pad=1)
+    axi.axhline(0.05, color="#333333", lw=0.4, ls=":")
+    axi.set_xticks([0.86, 0.90, 0.94]); axi.set_yticks([0, 0.05])
+    axi.tick_params(labelleft=False, labelbottom=False, length=2)
+    axi.set_title(r"lower-tail zoom", fontsize=5.5, pad=1)
     axi.grid(lw=0.2, alpha=0.4)
 
     r = load("exp5_yield.json")
@@ -188,7 +194,10 @@ def fig_yield():
     bar_values(ax[1], b2, fmt="%.1f", dy=0.05, fontsize=6)
     ax[1].set_xticks(x); ax[1].set_xticklabels(lbl, fontsize=5.6)
     ax[1].set_ylabel("gain over nominal (%)", fontsize=7)
-    ax[1].legend(frameon=False, fontsize=5.8, loc="upper left")
+    _mx = max(max(p5), max(cv))
+    ax[1].set_ylim(0, _mx * 1.42)
+    ax[1].legend(frameon=False, fontsize=5.8, loc="upper left", ncol=2,
+                 columnspacing=1.2, handletextpad=0.5)
     despine(ax[1]); ax[1].grid(axis="y", lw=0.3, alpha=0.4)
     panel_label(ax[1], "(b)")
     fig.tight_layout()

@@ -27,6 +27,7 @@ plt.rcParams.update({
     "legend.fontsize": 7,
     "lines.linewidth": 1.4,
     "figure.dpi": 300,
+    "savefig.dpi": 1000,
     "savefig.bbox": "tight",
     "savefig.pad_inches": 0.02,
 })

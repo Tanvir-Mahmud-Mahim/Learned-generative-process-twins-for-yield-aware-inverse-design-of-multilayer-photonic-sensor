@@ -54,8 +54,8 @@ def fig_inverse():
                  arrowprops=dict(arrowstyle="->", color=BLUE, lw=0.7))
     ax0.annotate("equal-budget gap:\n$%.3f$ vs. $%.3f$"
                  % (r["J_seeded"], r["J_random_search"]),
-                 xy=(356, r["J_random_search"] + 0.004), xytext=(42, 0.745),
-                 fontsize=6.2, color="#555555", va="bottom",
+                 xy=(352, r["J_random_search"] - 0.006), xytext=(298, 0.735),
+                 fontsize=6.2, color="#555555", va="top", ha="center",
                  arrowprops=dict(arrowstyle="->", color="#555555", lw=0.7,
                                  connectionstyle="arc3,rad=-0.15"))
     ax0.set_xlabel("solver queries", fontsize=7)
@@ -149,21 +149,22 @@ def fig_yield():
     labels = ["nominal $\\theta^\\star$", "Gauss. (diag.) twin",
               "Gauss. (full) twin", "FabGAN twin (ours)"]
     colors = ["#333333", GRAY, ORANGE, BLUE]
-    fig, ax = plt.subplots(2, 1, figsize=(W1, 3.05))
+    fig, ax = plt.subplots(2, 1, figsize=(W1, 2.85), gridspec_kw={'height_ratios': [1.3, 1]})
     for nm, l, c in zip(names, labels, colors):
         J = np.load(os.path.join(RES, "exp5_samples_%s.npy" % nm))
         xs = np.sort(J)
         ax[0].plot(xs, np.linspace(0, 1, len(xs)), color=c, label=l,
                    lw=1.1 if nm == "nominal" else 1.6)
     ax[0].axhline(0.05, color="#333333", lw=0.5, ls=":")
-    ax[0].text(0.772, 0.065, r"$5\%$ tail", fontsize=6.2)
-    ax[0].set_xlabel("merit $J$ under the hidden true process", fontsize=7)
-    ax[0].set_ylabel("empirical CDF", fontsize=7)
-    ax[0].legend(frameon=False, fontsize=5.8, loc="upper left")
+    ax[0].text(0.9695, 0.105, r"$5\%$ tail", fontsize=7.0, ha="right")
+    ax[0].set_xlabel("merit $J$ under the hidden true process", fontsize=8.6)
+    ax[0].set_ylabel("empirical CDF", fontsize=8.6)
+    ax[0].tick_params(labelsize=8.2)
+    ax[0].legend(frameon=False, fontsize=6.6, loc="upper left", labelspacing=0.28, handlelength=1.3, borderaxespad=0.15)
     despine(ax[0]); ax[0].grid(lw=0.3, alpha=0.4)
-    panel_label(ax[0], "(a)")
+    panel_label(ax[0], "(a)", dx=-0.145, dy=1.13)
     # inset: zoom on the lower tail
-    axi = ax[0].inset_axes([0.58, 0.08, 0.40, 0.42])
+    axi = ax[0].inset_axes([0.135, 0.055, 0.335, 0.30], zorder=6)
     axi.set_facecolor('white')
     axi.patch.set_alpha(1.0)
     for nm, c in zip(names, colors):
@@ -174,7 +175,7 @@ def fig_yield():
     axi.axhline(0.05, color="#333333", lw=0.4, ls=":")
     axi.set_xticks([0.86, 0.90, 0.94]); axi.set_yticks([0, 0.05])
     axi.tick_params(labelleft=False, labelbottom=False, length=2)
-    axi.set_title(r"lower-tail zoom", fontsize=5.5, pad=1)
+    for sp in axi.spines.values(): sp.set_linewidth(0.7)
     axi.grid(lw=0.2, alpha=0.4)
 
     r = load("exp5_yield.json")
@@ -190,16 +191,17 @@ def fig_yield():
                    color=cols, alpha=0.55, edgecolor="white")
     b2 = ax[1].bar(x + wdt / 2, cv, wdt, label=r"$\mathrm{CVaR}_{5\%}$",
                    color=cols, edgecolor="white")
-    bar_values(ax[1], b1, fmt="%.1f", dy=0.05, fontsize=6)
-    bar_values(ax[1], b2, fmt="%.1f", dy=0.05, fontsize=6)
-    ax[1].set_xticks(x); ax[1].set_xticklabels(lbl, fontsize=5.6)
-    ax[1].set_ylabel("gain over nominal (%)", fontsize=7)
+    bar_values(ax[1], b1, fmt="%.1f", dy=0.05, fontsize=7.2)
+    bar_values(ax[1], b2, fmt="%.1f", dy=0.05, fontsize=7.2)
+    ax[1].set_xticks(x); ax[1].set_xticklabels(lbl, fontsize=6.9)
+    ax[1].set_ylabel("gain (%)", fontsize=8.6)
     _mx = max(max(p5), max(cv))
     ax[1].set_ylim(0, _mx * 1.42)
-    ax[1].legend(frameon=False, fontsize=5.8, loc="upper left", ncol=2,
+    ax[1].legend(frameon=False, fontsize=7.2, loc="upper left", ncol=2,
                  columnspacing=1.2, handletextpad=0.5)
+    ax[1].tick_params(labelsize=8.2)
     despine(ax[1]); ax[1].grid(axis="y", lw=0.3, alpha=0.4)
-    panel_label(ax[1], "(b)")
+    panel_label(ax[1], "(b)", dx=-0.145, dy=1.13)
     fig.tight_layout()
     fig.savefig(os.path.join(FIG, "fig_yield.pdf"))
     plt.close(fig)
@@ -309,7 +311,7 @@ def fig_process():
     bench = np.load(os.path.join(ROOT, "data", "benchmark_designs.npz"))
     d, n = bench["d_um"][7], bench["n0"][7]
     rng = np.random.default_rng(3)
-    fig, ax = plt.subplots(1, 2, figsize=(W2, 2.05))
+    fig, ax = plt.subplots(1, 2, figsize=(W2, 1.88))
     xs = np.arange(1, len(d) + 1)
     for i in range(6):
         _, nt = process.corrupt(d, n, rng)
@@ -322,13 +324,13 @@ def fig_process():
         ax[0].step(xs, Ng[i], where="mid", color=BLUE, alpha=0.35, lw=0.7,
                    label="FabGAN twin (6 samples)" if i == 0 else None)
     ax[0].step(xs, n, where="mid", color="#222222", lw=1.5, label="recipe")
-    ax[0].set_xlabel("layer index $i$", fontsize=7, labelpad=1)
-    ax[0].set_ylabel(r"layer index $n_i(\lambda_0)$", fontsize=7)
-    ax[0].set_ylim(1.55, 2.62)
+    ax[0].set_xlabel("layer index $i$", fontsize=9, labelpad=1)
+    ax[0].set_ylabel(r"layer index $n_i(\lambda_0)$", fontsize=9)
+    ax[0].set_ylim(1.55, 2.72)
     ax[0].set_xticks([1, 5, 10, 15, 20])
-    ax[0].legend(frameon=False, fontsize=5.6, loc="upper right", ncol=1,
+    ax[0].legend(frameon=False, fontsize=7.4, loc="upper right", ncol=1,
                  handlelength=1.4, borderaxespad=0.2)
-    ax[0].tick_params(labelsize=6)
+    ax[0].tick_params(labelsize=7.8)
     despine(ax[0]); ax[0].grid(lw=0.3, alpha=0.4)
     panel_label(ax[0], "(a)", dx=-0.16, dy=1.09)
 
@@ -342,18 +344,18 @@ def fig_process():
                label="true process")
     ax[1].hist(eg, bins=bins, density=True, alpha=0.55, color=BLUE,
                label="FabGAN twin")
-    ax[1].annotate("particulate\nheavy tail", xy=(11.0, 2.5e-3),
-                   xytext=(11.2, 1.3e-1), fontsize=5.8, ha="center",
+    ax[1].annotate("particulate\nheavy tail", xy=(11.0, 3.2e-3),
+                   xytext=(12.6, 2.6e-2), fontsize=7.4, ha="center",
                    arrowprops=dict(arrowstyle="->", lw=0.7))
-    ax[1].annotate("systematic bias\n+ right skew", xy=(2.4, 1.5e-1),
-                   xytext=(-6.6, 3.5e-1), fontsize=5.8, ha="center",
+    ax[1].annotate("systematic bias\n+ right skew", xy=(2.4, 1.7e-1),
+                   xytext=(-4.9, 4.5e-1), fontsize=7.4, ha="center",
                    arrowprops=dict(arrowstyle="->", lw=0.7))
-    ax[1].set_xlabel("thickness error (%)", fontsize=7, labelpad=1)
-    ax[1].set_ylabel("density (log)", fontsize=7)
+    ax[1].set_xlabel("thickness error (%)", fontsize=9, labelpad=1)
+    ax[1].set_ylabel("density (log)", fontsize=9)
     ax[1].set_yscale("log")
     ax[1].set_ylim(2e-4, 3.2)
-    ax[1].legend(frameon=False, fontsize=5.8, loc="center right")
-    ax[1].tick_params(labelsize=6)
+    ax[1].legend(frameon=False, fontsize=7.4, loc="upper right", borderaxespad=0.2, labelspacing=0.3)
+    ax[1].tick_params(labelsize=7.8)
     despine(ax[1]); ax[1].grid(lw=0.3, alpha=0.4)
     panel_label(ax[1], "(b)", dx=-0.16, dy=1.09)
     fig.tight_layout(h_pad=1.4)

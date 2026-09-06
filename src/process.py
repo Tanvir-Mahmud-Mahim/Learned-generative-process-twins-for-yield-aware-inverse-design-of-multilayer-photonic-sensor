@@ -5,7 +5,7 @@ sampled corruption traces, exactly as a design team sees historical in-situ
 monitor data.  All magnitudes are consistent with the deposition-error scales
 studied in Yesilyurt et al., Nanophotonics 12, 993 (2023) (systematic +
 random errors of a few percent on layer thickness and index) and with the
-process tolerances used in the PARL-ID virtual fabrication model.
+in-situ monitoring literature (Wilbrandt et al., Appl. Opt. 47, C49, 2008).
 
 Error mechanisms (deliberately NOT jointly Gaussian, NOT i.i.d., and
 design-conditional):

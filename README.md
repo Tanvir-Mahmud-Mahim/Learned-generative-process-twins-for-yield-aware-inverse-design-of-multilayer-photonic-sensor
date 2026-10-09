@@ -8,7 +8,7 @@ The idea in one line: stop *assuming* a fabrication-error model during robust in
 
 > Learn what cannot be simulated; differentiate what can.
 
-This repository contains code and the open benchmark only. The manuscript is not distributed here.
+This repository contains the code, the open benchmark, and the article's supplementary material ([`docs/FabGAN-ID_Supplementary_Material.pdf`](docs/FabGAN-ID_Supplementary_Material.pdf)). The main manuscript is not distributed here; see the DOI above.
 
 ## Highlights
 - **Learned generative process twin** — a conditional, moment-matched Wasserstein GAN with gradient penalty (WGAN-GP), trained on only 400 historical deposition traces, cuts the estimation error of the yield-deciding tail statistics (the fifth percentile P5 and the conditional value-at-risk CVaR at 5%) by **34–38%** against the strongest of eight density baselines fitted to identical data: diagonal and full-covariance Gaussians, a five-component Gaussian mixture, a nonparametric bootstrap, Gaussian and t copulas, a Silverman-bandwidth kernel density estimate, and a RealNVP normalizing flow.
@@ -28,6 +28,7 @@ experiments/            E1–E7b plus exp_rev_* revision studies (chunked/resuma
                         — rerun each script until it prints DONE)
 make_figures/           publication figures and pipeline-generated tables
 data/                   released benchmark (designs, spectra, process traces)
+docs/                   supplementary material for the article (PDF)
 results/                all experiment outputs (JSON/NPY/PKL)
 ```
 

@@ -4,7 +4,8 @@
 Companion dataset for:
 T. M. Mahim, M. N. Islam, M. M. Rahman, and A. S. M. Mohsin, "FabGAN-ID:
 Learning the Fabrication Process for Yield-Aware Inverse Design of
-Multilayer Photonic Sensor Filters," submitted to IEEE Sensors Journal.
+Multilayer Photonic Sensor Filters," IEEE Sensors Journal, early access,
+2026, doi: 10.1109/JSEN.2026.3732239.
 
 ## Contents
 
